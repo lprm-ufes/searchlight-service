@@ -1,3 +1,5 @@
+{% extends "layout.swig" %}
+
 {% block body %}
 <!-- Default home page -->
 <link type="text/css" href='http://sailsjs.org/styles/fonts.css' rel='stylesheet'/>

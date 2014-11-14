@@ -29,6 +29,7 @@
     -->
 
     <!--STYLES-->
+    <link rel="stylesheet" href="/vendor/bootstrap/bootstrap.css">
     <link rel="stylesheet" href="/styles/importer.css">
     <!--STYLES END-->
   </head>
@@ -89,6 +90,8 @@
     -->
 
     <!--SCRIPTS-->
+    <script src="/vendor/bootstrap/bootstrap.js"></script>
+    <script src="/vendor/jquery/jquery.js"></script>
     <script src="/js/dependencies/sails.io.js"></script>
     <!--SCRIPTS END-->
   </body>

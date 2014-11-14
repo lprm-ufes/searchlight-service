@@ -24,7 +24,8 @@ module.exports = function(grunt) {
 			files: {
 				'.tmp/public/**/*.html': require('../pipeline').jsFilesToInject,
 				'views/**/*.html': require('../pipeline').jsFilesToInject,
-				'views/**/*.ejs': require('../pipeline').jsFilesToInject
+				//'views/**/*.ejs': require('../pipeline').jsFilesToInject,
+				'views/**/*.swig': require('../pipeline').jsFilesToInject
 			}
 		},
 
@@ -83,7 +84,8 @@ module.exports = function(grunt) {
 			files: {
 				'.tmp/public/**/*.html': require('../pipeline').cssFilesToInject,
 				'views/**/*.html': require('../pipeline').cssFilesToInject,
-				'views/**/*.ejs': require('../pipeline').cssFilesToInject
+				//'views/**/*.ejs': require('../pipeline').cssFilesToInject,
+				'views/**/*.swig': require('../pipeline').cssFilesToInject
 			}
 		},
 
