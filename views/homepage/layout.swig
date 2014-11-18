@@ -36,26 +36,11 @@
 
   <body>
   
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-        <a class="navbar-brand">Searchlight</a>
-        </div>
-    </div>
     {% block body %}
     {% endblock %}
 
 
-    <div class="container">
-    <br>
-    <footer class="footer">
-        <div class="pull-right">
-            <a href="spaces.wancharle.com.br/sl">Searchlight</a>
-            <div>Facilitando a visualização de informações crowdsourcing em Mapas Web através de Zoom.</div>
-        </div>
-    </footer>
-    </div>
-
-    <!--
+        <!--
         Client-side Templates
         ========================
 
