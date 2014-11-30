@@ -10,16 +10,10 @@ module.exports =
       required: true
       minLength: 6
 
-    #fullname:
-    #  type: 'string'
-
-    #email:
-    #  type: 'string'
-    #  email: true
-    #  required: true
-    #  unique: true
-
-    }
+    notes:
+      collection: 'note'
+      via: 'user'
+  }
   
   beforeCreate: (attrs,next) ->
     bcrypt = require('bcrypt')

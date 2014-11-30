@@ -6,6 +6,9 @@
 module.exports =
 
   attributes: {
+    user:
+      model: 'user'
+
     category:
       type: 'string'
 
