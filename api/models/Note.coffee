@@ -9,7 +9,16 @@ module.exports =
     user:
       model: 'user'
 
-    category:
+    fotoURL:
+      type: 'string'
+
+    categoria:
+      type: 'string'
+    
+    comentarios:
+      type: 'string'
+
+    data_hora:
       type: 'string'
 
     # Geografics fields:
@@ -35,6 +44,7 @@ module.exports =
 
     heading:  # The heading as degrees clockwise from North
       type: 'string'
+
 
       }
 
