@@ -21,7 +21,6 @@
     "rc": "~0.5.0",
     "sails": "~0.10.5",
     "sails-disk": "~0.10.0",
-    "sails-generate-bower": "0.0.2",
     "skipper-s3": "^0.5.5",
     "swig": "^1.4.2"
   },
@@ -40,5 +39,9 @@
     "url": "git://github.com/wancharle/searchlight-webapp.git"
   },
   "author": "wancharle",
-  "license": ""
+  "license": "",
+  "devDependencies": {
+    "grunt-bower-task": "^0.4.0",
+    "sails-generate-bower": "0.0.2"
+  }
 }
