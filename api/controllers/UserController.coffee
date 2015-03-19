@@ -4,6 +4,10 @@
 # @help        :: See http://links.sailsjs.org/docs/controllers
 
 module.exports =
+  logout: (req, res) ->
+    req.session.authenticated = false
+    res.json {  ok:true}
+
   login: (req, res) ->
     bcrypt = require 'bcrypt'
 
@@ -19,6 +23,7 @@ module.exports =
           if match
             # password match
             req.session.user = user.id
+            req.session.authenticated = true
             res.json user
           else
             # invalid password
