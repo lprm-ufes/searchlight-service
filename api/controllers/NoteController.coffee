@@ -31,6 +31,7 @@ module.exports = {
     res.status(201)
     Note.find()
     .populate('user')
+    .where({notebook:req.query.notebook})
     .sort({ createdAt: 'desc' })
     .exec (err,notes) =>
         res.jsonp(notes)

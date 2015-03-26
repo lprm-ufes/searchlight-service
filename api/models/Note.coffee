@@ -6,9 +6,16 @@
 module.exports =
 
   attributes: {
+    # associations
     user:
       model: 'user'
+      required: true
 
+    notebook:
+      model: 'notebook'
+      required: true
+
+    # attributes
     fotoURL:
       type: 'string'
 
