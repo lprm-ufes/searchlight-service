@@ -27,13 +27,52 @@ module.exports = {
     else
       cb_create(req.params.all())
 
-  lista: (req,res) ->
+lista: (req,res) ->
+    ObjectId = require('mongodb').ObjectID;
+    extend = require('node.extend')
     res.status(201)
-    Note.find()
-    .populate('user')
-    .where({notebook:req.query.notebook})
-    .sort({ createdAt: 'desc' })
-    .exec (err,notes) =>
-        res.jsonp(notes)
+
+    q = req.param('where')
+    if q
+      q = JSON.parse(q)
+    else
+      q = {}
+    where = extend({},q)
+    if req.param('notebook')
+      where.notebook = req.param('notebook')
+    console.log(req.query)
+    if not req.param('lat')
+      Note.find()
+      .populate('user')
+      .where(where)
+      .sort({createdAt:'desc'})
+      .exec (err,docxs)->
+              res.jsonp(docxs)
+    else
+      pos = [ parseFloat(req.query.lng), parseFloat(req.query.lat)]
+      console.log(pos)
+      Note.native (err,collection)->
+        collection.find(
+          geo:
+            $near:
+              $geometry:
+                type: 'Point'
+                coordinates: pos
+              $maxDistance:1000 
+              $distanceMultiplier: 6371
+
+        ).toArray (mongoErr,docs)->
+          if (mongoErr) 
+            console.error(mongoErr)
+            res.send('geoProximity failed with error='+mongoErr)
+          else
+            where.id= (new ObjectId(""+d._id) for d in docs )
+            console.log(where)
+            Note.find()
+            .populate('user')
+            .where(where)
+            .exec (err,docxs)->
+              res.jsonp(docxs)
+              
 }
 # vim: set ts=2 sw=2 sts=2 expandtab:

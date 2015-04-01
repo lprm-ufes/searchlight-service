@@ -4,6 +4,19 @@
  # @docs        :: http://sailsjs.org/#!documentation/models
 
 module.exports =
+  beforeCreate: (values,next) ->
+    values.geo = {
+      type: "Point",
+      coordinates: [parseFloat(values.longitude), parseFloat(values.latitude)]
+    }
+    next()
+
+  beforeUpdate: (values, next) ->
+    values.geo = {
+      type: "Point",
+      coordinates: [parseFloat(values.longitude), parseFloat(values.latitude)]
+    }
+    next()
 
   attributes: {
     # associations
@@ -36,6 +49,16 @@ module.exports =
     longitude:
       type: 'float'
       required: true
+
+    loc:
+      type: 'array'
+      require: true
+      index: '2dsphere'
+    geo:
+      index: '2dsphere'
+      require: true
+      type: 'Point'
+
 
     accuracy:
       type: 'string'
