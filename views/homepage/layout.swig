@@ -93,6 +93,7 @@
     <script src="/js/dependencies/sails.io.js"></script>
     <script src="/vendor/jquery/jquery.js"></script>
     <script src="/vendor/bootstrap/bootstrap.js"></script>
+    <script src="/vendor/jquery.qrcode/jquery.qrcode.js"></script>
     <!--SCRIPTS END-->
   </body>
 </html>
