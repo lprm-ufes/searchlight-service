@@ -27,7 +27,10 @@ module.exports = {
     else
       cb_create(req.params.all())
 
-lista: (req,res) ->
+  listaExternal: (req,res) ->
+    NotesImporter.fromNote(req,res,req.param('noteid'))
+
+  lista: (req,res) ->
     ObjectId = require('mongodb').ObjectID;
     extend = require('node.extend')
     res.status(201)
@@ -40,7 +43,6 @@ lista: (req,res) ->
     where = extend({},q)
     if req.param('notebook')
       where.notebook = req.param('notebook')
-    console.log(req.query)
     if not req.param('lat')
       Note.find()
       .populate('user')
@@ -50,7 +52,6 @@ lista: (req,res) ->
               res.jsonp(docxs)
     else
       pos = [ parseFloat(req.query.lng), parseFloat(req.query.lat)]
-      console.log(pos)
       Note.native (err,collection)->
         collection.find(
           geo:
@@ -67,7 +68,6 @@ lista: (req,res) ->
             res.send('geoProximity failed with error='+mongoErr)
           else
             where.id= (new ObjectId(""+d._id) for d in docs )
-            console.log(where)
             Note.find()
             .populate('user')
             .where(where)
