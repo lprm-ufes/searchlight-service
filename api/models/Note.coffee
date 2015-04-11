@@ -12,6 +12,8 @@ module.exports =
     next()
 
   beforeUpdate: (values, next) ->
+    values.longitude = if values.longitude then values.longitude else 0.0 
+    values.latitude = if values.latitude then values.latitude else 0.0 
     values.geo = {
       type: "Point",
       coordinates: [parseFloat(values.longitude), parseFloat(values.latitude)]

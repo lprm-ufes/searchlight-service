@@ -27,8 +27,25 @@ module.exports = {
     else
       cb_create(req.params.all())
 
+  destroyOrphans: (req,res) ->
+    Notebook.find().then( (notebooks)->
+       ids = _.pluck(notebooks,'id')
+       Note.destroy({notebook:{'!':ids}}).then((notes)-> 
+        res.json(notes)
+      )
+
+    )
+     
   listaExternal: (req,res) ->
-    NotesImporter.fromNote(req,res,req.param('noteid'))
+    NotesImporter.fromNote(req,res,req.param('noteid'),req.param('fonteIndex'))
+
+  mapa: (req,res) ->
+    id = req.param('id')
+    Note.findOne({id:id}).then((note)->
+      res.view('noteMapa',{note:note})
+    ).catch((err)->
+      res.json(err)
+    )
 
   lista: (req,res) ->
     ObjectId = require('mongodb').ObjectID;

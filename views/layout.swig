@@ -35,16 +35,17 @@
   </head>
 
   <body>
-  
+    {% block navbar %}  
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
         <a class="navbar-brand">Searchlight</a>
         </div>
     </div>
+    {% endblock %}
     {% block body %}
     {% endblock %}
 
-
+    {% block footer %}
     <div class="container">
     <br>
     <footer class="footer">
@@ -54,6 +55,7 @@
         </div>
     </footer>
     </div>
+    {% endblock %}
 
     <!--
         Client-side Templates
