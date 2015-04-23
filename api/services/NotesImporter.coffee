@@ -15,7 +15,7 @@ module.exports = {
 
   convertData: (json,fonte) ->
     conversionFunc = eval("exports="+fonte.func_code)
-   
+
     itens = json.map (item) ->
       return conversionFunc(item)
         
@@ -113,13 +113,13 @@ module.exports = {
     )
 
   googleDownload:  (req,res,fonte,force,notebookId,userId) ->
-    TABLETOP.init { key:fonte.url, simpleSheet: true, callback: (error,response,body) ->
-        if ( not error)
-          parsed = BABY.parse(body)
-          json = parsed.data
-          NotesImporter.convertData(json.slice(1),fonte).then( (itens) ->
+    TABLETOP.init { key:fonte.url,parseNumbers:true, simpleSheet: true, callback: (data,tabletop) ->
+        if ( data)
+          NotesImporter.convertData(data,fonte).then( (itens) ->
             NotesImporter.importData(req,res,itens,fonte,force,notebookId,userId)
           )
+        else
+          res.json(tabletop)
     }
   
 }
