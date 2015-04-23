@@ -51,6 +51,7 @@ module.exports = {
     ObjectId = require('mongodb').ObjectID;
     extend = require('node.extend')
     res.status(201)
+    limite = if req.param('limit') then parseInt(req.param('limit')) else 10000
 
     q = req.param('where')
     if q
@@ -64,6 +65,7 @@ module.exports = {
       Note.find()
       .populate('user')
       .where(where)
+      .limit(limite)
       .sort({createdAt:'desc'})
       .exec (err,docxs)->
               res.jsonp(docxs)
@@ -79,7 +81,7 @@ module.exports = {
               $maxDistance:1000 
               $distanceMultiplier: 6371
 
-        ).toArray (mongoErr,docs)->
+        ).limit(limite).toArray (mongoErr,docs)->
           if (mongoErr) 
             console.error(mongoErr)
             res.send('geoProximity failed with error='+mongoErr)
@@ -87,7 +89,7 @@ module.exports = {
             where.id= (new ObjectId(""+d._id) for d in docs )
             Note.find()
             .populate('user')
-            .where(where)
+            .where(where).limit(limite)
             .exec (err,docxs)->
               res.jsonp(docxs)
               

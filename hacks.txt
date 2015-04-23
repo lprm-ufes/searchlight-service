@@ -1,0 +1,11 @@
+alterei o codigo do waterline-cursor de acordo com dica de 
+-----------------------------------------------------------
+https://github.com/balderdashy/waterline-cursor/issues/2
+
+More of this bug here - balderdashy/waterline#733
+
+There is synchronous call in buildChildBuffers function in the file populateBuffers.js, line 68. This problem is widely covered here - caolan/async#588. I guess it would be enough to change line 68 from nextParent() to async.setImmediate(nextParent).
+-----------------------------------
+Apos isso parei de ter o erro é preciso atualizar o codigo depois para evitar esse problema e colocar um limite para download nas querys...
+nos meus teste da crash em limite com 4k objects seria seguro entao limitar em 1k por requisição e fazer o download em partes
+
