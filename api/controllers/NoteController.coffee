@@ -36,8 +36,11 @@ module.exports = {
 
     )
      
-  listaExternal: (req,res) ->
-    NotesImporter.fromNote(req,res,req.param('noteid'),req.param('fonteIndex'))
+  getCachedUrl: (req,res)->
+    NotesImporter.getCachedURL(req,res)
+    
+  listaExternal: (req,res) -> #FIXME: remover apos refatorar a view do searchlight mapa
+    NotesImporter.getCachedURL(req,res)
 
   mapa: (req,res) ->
     id = req.param('id')
