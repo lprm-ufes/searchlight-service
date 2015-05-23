@@ -18,7 +18,7 @@ module.exports = {
           fonte = found.config.dataSources[fonteIndex]
           # checa se url é interna ou externa
           if (fonte.url.indexOf(req.host) == -1)
-              force = req.param('force')
+              force = req.param('forceImport')
               Notebook.findOne({name:fonte.url}).then( (notebook) ->
                 if (force)
                   NotesImporter.download(found,fonteIndex,notebook.id,next)
@@ -32,7 +32,7 @@ module.exports = {
             # redirecione para o endereço original no servidor
             next({error:'tentando criar cache com dados do mesmo servidor'})
         else
-          next({error: "Nota nao encontrada", log:err})
+          next({error: "Nota '#{noteid}'nao encontrada"})
  
   download: (noteconfig,fonteIndex,notebookId,next)->
         api = new SLSAPI(noteconfig.config)
@@ -40,26 +40,27 @@ module.exports = {
           dataPool = SLSAPI.dataPool.createDataPool(api.config)
           dataPool.loadOneData(fonteIndex)
           api.on SLSAPI.dataPool.DataPool.EVENT_LOAD_STOP, (dataPool)->
+              dataSource = dataPool.dataSources[fonteIndex] 
               NotesImporter.importData(
-                dataPool.dataSources[fonteIndex].notes,
+                dataSource,
                 notebookId,
                 noteconfig.user,
                 next)
 
-  importData: (itens,notebookId,userId,next) ->
+  importData: (dataSource,notebookId,userId,next) ->
     if notebookId
       # força importação apagando dados anteriores
       Note.destroy({notebook:notebookId})
       .then ()->
-        NotesImporter.createNotes(itens,notebookId,userId,next)
+        NotesImporter.createNotes(dataSource.notes,notebookId,userId,next)
       .catch(
         (err)->  console.log(err);next(err))
 
     else
       # tenta importar se nao existir caso contrario da erro.
-      Notebook.create({name:fonte.url,isNoteCache:"true"}).exec((err,notebook)->
+      Notebook.create({name:dataSource.url,isNoteCache:"true"}).exec((err,notebook)->
         if (not err)
-          NotesImporter.createNotes(itens,notebook.id,userId,next)
+          NotesImporter.createNotes(dataSource.notes,notebook.id,userId,next)
         else
           next(err)
        
