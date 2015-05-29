@@ -3,24 +3,22 @@ SLSAPI = require('slsapi')
 module.exports = {
   # devolve o id da notebook responsavel por fazer o cache da fonte requisitada
   getCachedURL: (req,res)->
-    NotesImporter.fromNote req, req.param('noteid'), req.param('fonteIndex'), (err,notebookId)->
+    NotesImporter.fromMashup req, req.param('mashupid'), req.param('fonteIndex'), (err,notebookId)->
       if err
         res.badRequest(err)
         console.log(err)
       else
         res.json({cachedUrl:"http://#{req.host}/note/lista?notebook=#{notebookId}"})
 
-  fromNote: (req,noteid,fonteIndex,next)->
-      Note.findOne({id:noteid}).exec (err,found) ->
+  fromMashup: (req,mashupid,fonteIndex,next)->
+      Mashup.findOne({id:mashupid}).exec (err,found) ->
         if not err and found
-          if not found.config.dataSources
-            found.config.dataSources = found.config.fontes
-          fonte = found.config.dataSources[fonteIndex]
+          fonte = found.dataSources[fonteIndex]
           # checa se url é interna ou externa
           if (fonte.url.indexOf(req.host) == -1)
-              force = req.param('forceImport')
               Notebook.findOne({name:fonte.url}).then( (notebook) ->
-                if (force)
+                forcei = req.param('forceImport')
+                if (forcei)
                   NotesImporter.download(found,fonteIndex,notebook.id,next)
                 else
                   next(null,notebook.id)
@@ -30,14 +28,15 @@ module.exports = {
           else
             # ao tentar criar cache para dados do proprio servidor
             # redirecione para o endereço original no servidor
-            next({error:'tentando criar cache com dados do mesmo servidor'})
+            next({error:'tentando criar cache com dados do mesmo servidor',url:fonte.url,hostServer:req.host})
         else
-          next({error: "Nota '#{noteid}'nao encontrada"})
+          next({error: "Nota '#{mashupid}'nao encontrada"})
  
   download: (noteconfig,fonteIndex,notebookId,next)->
-        api = new SLSAPI(noteconfig.config)
+        api = new SLSAPI(noteconfig)
         api.on SLSAPI.Config.EVENT_READY,()->
-          dataPool = SLSAPI.dataPool.createDataPool(api.config)
+          api.mashup.useCache=false # evita loop de carregar via cache
+          dataPool = SLSAPI.dataPool.createDataPool(api.mashup)
           dataPool.loadOneData(fonteIndex)
           api.on SLSAPI.dataPool.DataPool.EVENT_LOAD_STOP, (dataPool)->
               dataSource = dataPool.dataSources[fonteIndex] 
