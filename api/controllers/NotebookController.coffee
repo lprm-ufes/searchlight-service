@@ -6,6 +6,7 @@
 module.exports = {
     _config:
         populate:false
+
     qrcode: (req,res) ->
         res.view('notebookQrcode')
 
@@ -14,17 +15,6 @@ module.exports = {
         Notebook.findOne({name:req.param('name')}).populate('notes').then( (notebook)->
           res.json(notebook) 
        )
-        
-
-    mapas: (req,res) ->
-       Notebook.findOne({name:'mapas'}).populate('notes').then( (notebook)->
-          res.json(notebook) 
-       )
-    maps: (req,res) ->
-        Notebook.findOne({name:'mapas'}).populate('notes').then( (notebook)->
-          res.view('notebookMapas',{notebook:notebook})
-       )
-
 
     }
 

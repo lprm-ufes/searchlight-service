@@ -6,10 +6,12 @@
 <div class="row">
     <h1>Mapas cadastrados</h1>
     <ul class="list-group">
-        {% for note in notebook.notes %}
-            <li class="list-group-item"><a target="_blank" href="/note/mapa/{{note.id}}">{{ note.config.viewerTitle}}</a>
+        {% for mashup in mashups %}
+            <li class="list-group-item"><a target="_blank" href="/mashup/mapa/{{mashup.id}}">{{ mashup.title}}</a>
+            {% if not mashup.notdelete %}
             <span class='pull-right'>
-                <a class='link-remover' data-noteid='{{ note.id }}' href='#'>Remover</a></span>
+                <a class='link-remover' data-mashupid='{{ mashup.id }}' href='#'>Remover</a></span>
+            {% endif %}
             </li>
         {% endfor %}
     </ul>
@@ -23,11 +25,11 @@
 $('a.link-remover').click(function (){
       
       $.ajax({
-         url: "/note/"+$(this).data('noteid'),
+         url: "/mashup/"+$(this).data('mashupid'),
          type: "DELETE",
          crossDomain: true,
          success: function(){
-             window.location='/notebook/maps';
+             window.location='/mashup/maps';
              }
       } )
     

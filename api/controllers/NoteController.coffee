@@ -33,17 +33,8 @@ module.exports = {
        Note.destroy({notebook:{'!':ids}}).then((notes)-> 
         res.json(notes)
       )
-
     )
      
-
-  mapa: (req,res) ->
-    id = req.param('id')
-    Note.findOne({id:id}).then((note)->
-      res.view('noteMapa',{note:note})
-    ).catch((err)->
-      res.json(err)
-    )
 
   lista: (req,res) ->
     ObjectId = require('mongodb').ObjectID;

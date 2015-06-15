@@ -8,4 +8,21 @@ module.exports = {
   getCachedUrl: (req,res)->
     NotesImporter.getCachedURL(req,res)
  
+  html: (req,res) ->
+    Mashup.find().then( (mashups)->
+      res.view('mashupMapas',{mashups:mashups})
+  )
+
+  mapa: (req,res) ->
+    id = req.param('id')
+    Mashup.findOne({id:id}).then((note)->
+      if not note.container_id
+          note.container_id = 'map'
+      res.view('mashupMapa',{note:note})
+    ).catch((err)->
+      res.json(err)
+    )
+
+
+
 }
