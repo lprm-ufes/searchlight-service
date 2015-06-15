@@ -29,7 +29,7 @@ $('a.link-remover').click(function (){
          type: "DELETE",
          crossDomain: true,
          success: function(){
-             window.location='/mashup/maps';
+             window.location='/mashup/html';
              }
       } )
     
