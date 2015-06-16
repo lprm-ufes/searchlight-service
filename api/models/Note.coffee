@@ -3,11 +3,15 @@
  # @description :: TODO: You might write a short summary of how this model works and what it represents here.
  # @docs        :: http://sailsjs.org/#!documentation/models
 
+
+SLSAPI = require('slsapi')
+parseFloatPTBR = SLSAPI.utils.parseFloatPTBR
+
 module.exports =
   beforeCreate: (values,next) ->
     values.geo = {
       type: "Point",
-      coordinates: [parseFloat(values.longitude), parseFloat(values.latitude)]
+      coordinates: [parseFloatPTBR(values.longitude), parseFloatPTBR(values.latitude)]
     }
     next()
 
@@ -16,7 +20,7 @@ module.exports =
     values.latitude = if values.latitude then values.latitude else 0.0 
     values.geo = {
       type: "Point",
-      coordinates: [parseFloat(values.longitude), parseFloat(values.latitude)]
+      coordinates: [parseFloatPTBR(values.longitude), parseFloatPTBR(values.latitude)]
     }
     next()
 
@@ -45,11 +49,11 @@ module.exports =
 
     # Geografics fields:
     latitude:
-      type: 'float'
+      type: 'string'
       required: true
 
     longitude:
-      type: 'float'
+      type: 'string'
       required: true
 
     loc:

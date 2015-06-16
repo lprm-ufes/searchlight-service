@@ -16,6 +16,7 @@
 //  to change `assets/styles/importer.less` instead.)
 var cssFilesToInject = [
   'vendor/**/*.css',
+  'bower_components/bootstrap/dist/css/bootstrap.css',
   'styles/**/*.css'
 ];
 
@@ -27,8 +28,8 @@ var jsFilesToInject = [
   'js/dependencies/sails.io.js',
 
   // Dependencies like jQuery, or Angular are brought in here
-  'js/dependencies/**/*.js',
   'vendor/jquery/jquery.js',
+  'js/dependencies/**/*.js',
   'vendor/**/*.js',
 
   // All of the rest of your client-side js files

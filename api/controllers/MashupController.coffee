@@ -8,6 +8,9 @@ module.exports = {
   getCachedUrl: (req,res)->
     NotesImporter.getCachedURL(req,res)
  
+  qrcode: (req,res) ->
+    res.view('mashupQRcode')
+
   html: (req,res) ->
     Mashup.find().then( (mashups)->
       res.view('mashupMapas',{mashups:mashups})

@@ -3,6 +3,9 @@
  # @description :: Server-side logic for managing notes
  # @help        :: See http://links.sailsjs.org/docs/controllers
 
+SLSAPI = require('slsapi')
+parseFloatPTBR = SLSAPI.utils.parseFloatPTBR
+
 module.exports = {
   anotar: (req,res) ->
     res.writeHead 200, {'content-type': 'text/html'}
@@ -59,7 +62,7 @@ module.exports = {
       .exec (err,docxs)->
               res.jsonp(docxs)
     else
-      pos = [ parseFloat(req.query.lng), parseFloat(req.query.lat)]
+      pos = [ parseFloatPTBR(req.query.lng), parseFloatPTBR(req.query.lat)]
       Note.native (err,collection)->
         collection.find(
           geo:
