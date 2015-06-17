@@ -9,19 +9,19 @@ parseFloatPTBR = SLSAPI.utils.parseFloatPTBR
 
 module.exports =
   beforeCreate: (values,next) ->
-    values.geo = {
-      type: "Point",
-      coordinates: [parseFloatPTBR(values.longitude), parseFloatPTBR(values.latitude)]
-    }
+    if values.latitude
+      values.geo = {
+        type: "Point",
+        coordinates: [parseFloatPTBR(values.longitude), parseFloatPTBR(values.latitude)]
+      }
     next()
 
   beforeUpdate: (values, next) ->
-    values.longitude = if values.longitude then values.longitude else 0.0 
-    values.latitude = if values.latitude then values.latitude else 0.0 
-    values.geo = {
-      type: "Point",
-      coordinates: [parseFloatPTBR(values.longitude), parseFloatPTBR(values.latitude)]
-    }
+    if values.latitude
+      values.geo = {
+        type: "Point",
+        coordinates: [parseFloatPTBR(values.longitude), parseFloatPTBR(values.latitude)]
+      }
     next()
 
   attributes: {
