@@ -67,6 +67,9 @@ module.exports = {
       Note.native (err,collection)->
         collection.find(
           geo:
+            # metodo sem ordenacao que permite buscar por mais de 100 resultados ao contrario do $near
+            #$geoWithin: 
+            #  $centerSphere: [ pos, distance/6371000]
             $near:
               $geometry:
                 type: 'Point'
@@ -74,7 +77,7 @@ module.exports = {
               $maxDistance:distance 
               $distanceMultiplier: 6371
 
-        ).limit(limite).toArray (mongoErr,docs)->
+        ).toArray (mongoErr,docs)->
           if (mongoErr) 
             console.error(mongoErr)
             res.send('geoProximity failed with error='+mongoErr)
