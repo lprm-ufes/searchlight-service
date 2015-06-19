@@ -10,7 +10,6 @@ parseFloatPTBR = SLSAPI.utils.parseFloatPTBR
 module.exports =
   beforeCreate: (values,next) ->
     if not values.hashid
-      console.log(values)
       values.hashid = SLSAPI.DataSource.hashItem(values)
 
     if values.latitude
