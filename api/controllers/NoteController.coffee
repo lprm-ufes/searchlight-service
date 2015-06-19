@@ -63,6 +63,7 @@ module.exports = {
               res.jsonp(docxs)
     else
       pos = [ parseFloatPTBR(req.query.lng), parseFloatPTBR(req.query.lat)]
+      distance=parseInt(req.query.distance or 1000)
       Note.native (err,collection)->
         collection.find(
           geo:
@@ -70,7 +71,7 @@ module.exports = {
               $geometry:
                 type: 'Point'
                 coordinates: pos
-              $maxDistance:1000 
+              $maxDistance:distance 
               $distanceMultiplier: 6371
 
         ).limit(limite).toArray (mongoErr,docs)->
