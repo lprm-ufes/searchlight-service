@@ -17,18 +17,6 @@ module.exports = {
     <input type="submit" value="upload">
     </form>'
 
-  create: (req,res, next) ->
-    cb_create = (params) =>
-      Note.create params, (err, note) =>
-        if (err) 
-          return next(err)
-        res.status(201)
-        res.json(note)
-
-    if req.param('fotoURL')
-      S3Service.fotoUpload(req,res,cb_create,'foto','note')
-    else
-      cb_create(req.params.all())
 
   destroyOrphans: (req,res) ->
     Notebook.find().then( (notebooks)->
@@ -83,6 +71,7 @@ module.exports = {
             res.send('geoProximity failed with error='+mongoErr)
           else
             where.id= (new ObjectId(""+d._id) for d in docs )
+            # ordem eh perdida aqui
             Note.find()
             .populate('user')
             .where(where).limit(limite)

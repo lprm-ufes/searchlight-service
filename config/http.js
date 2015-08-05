@@ -21,7 +21,7 @@ module.exports.http = {
   *                                                                           *
   ****************************************************************************/
 
-  // middleware: {
+   middleware: {
 
   /***************************************************************************
   *                                                                          *
@@ -30,23 +30,25 @@ module.exports.http = {
   *                                                                          *
   ***************************************************************************/
 
-    // order: [
-    //   'startRequestTimer',
-    //   'cookieParser',
-    //   'session',
-    //   'myRequestLogger',
-    //   'bodyParser',
-    //   'handleBodyParserError',
-    //   'compress',
-    //   'methodOverride',
-    //   'poweredBy',
-    //   '$custom',
-    //   'router',
-    //   'www',
-    //   'favicon',
-    //   '404',
-    //   '500'
-    // ],
+     order: [
+       'startRequestTimer',
+       'cookieParser',
+       'session',
+       'bodyParser',
+       'handleBodyParserError',
+       's3ServiceMidleware',
+       'ocrServiceMidleware',
+       'compress',
+       'methodOverride',
+       'poweredBy',
+       '$custom',
+       'router',
+       'www',
+
+       'favicon',
+       '404',
+       '500',
+     ],
 
   /****************************************************************************
   *                                                                           *
@@ -54,10 +56,21 @@ module.exports.http = {
   *                                                                           *
   ****************************************************************************/
 
-    // myRequestLogger: function (req, res, next) {
-    //     console.log("Requested :: ", req.method, req.url);
-    //     return next();
-    // }
+    s3ServiceMidleware: function (req, res, next) {
+        if (req.method=='POST' && ((req.path.indexOf('/note/update/') == 0) || (req.path.indexOf('/note/create/') == 0)) && req.param('fotoURL')){
+            return S3Service.fotoUpload(req,res,next,'foto','note')
+        }else{
+            return next()
+         }
+     },
+
+    ocrServiceMidleware: function (req, res, next) {
+        if (((req.path.indexOf('/note/update/') == 0) || (req.path.indexOf('/note/create/') == 0)) && req.param('fotoURL')){
+            return OCRService.processOCR(req,res,next);
+         }else{
+            return next();
+         }
+     }
 
 
   /***************************************************************************
@@ -71,7 +84,7 @@ module.exports.http = {
 
     // bodyParser: require('skipper')
 
-  // },
+  },
 
   /***************************************************************************
   *                                                                          *

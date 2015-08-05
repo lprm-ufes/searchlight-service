@@ -1,6 +1,6 @@
 
 module.exports = {
-  fotoUpload: function (req,res,create, fieldname, dirname,saveas) {
+  fotoUpload: function (req,res,next, fieldname, dirname,saveas) {
     req.file(fieldname).upload({
       adapter: require('skipper-s3'),
       key: sails.config.sl.S3KEY,
@@ -16,10 +16,9 @@ module.exports = {
             if (err){
               return res.negotiate(err)
             }else{
-              params = req.params.all()
-              params[fieldname+"Info"]=uploadedFiles
-              params[fieldname+"URL"]=uploadedFiles[0].extra.Location
-              return create(params)
+              req.query.fotoInfo=uploadedFiles
+              req.query.fotoURL=uploadedFiles[0].extra.Location
+              return next()
               
             }
         
