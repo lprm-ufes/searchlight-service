@@ -4,6 +4,10 @@
 # @help        :: See http://links.sailsjs.org/docs/controllers
 
 module.exports =
+  _config:
+    populate:false
+
+
   logout: (req, res) ->
     req.session.authenticated = false
     res.json {  ok:true}
