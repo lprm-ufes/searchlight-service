@@ -15,6 +15,7 @@ module.exports = {
         if not err and found
           fonte = found.dataSources[fonteIndex]
           # checa se url é interna ou externa
+          console.log(found,"fonte", fonte,"!!!!!!!!!!!!!!!!")
           if (fonte.url.indexOf(req.host) == -1)
               Notebook.findOne({name:fonte.url}).then( (notebook) ->
                 forcei = req.param('forceImport')

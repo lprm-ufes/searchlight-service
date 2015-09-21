@@ -10,8 +10,11 @@ module.exports = {
     Note.findOne({id:id}).exec((err, found)->
       try
         ocrjson = JSON.stringify(req.param('ocr'))
+        console.log(ocrjson);
         fs.writeFileSync('/tmp/ocr.json',ocrjson)
         exec("bash /home/wancharle/searchlight-webapp/processaOCR.sh '#{found.fotoURL}' ",(error,stdout,stderr)->
+
+          console.log(stdout,stderr,error)
           stdout = stdout.substr(stdout.indexOf('\n')+1)
           req.query.ocr_result = JSON.parse(stdout)
           return next()

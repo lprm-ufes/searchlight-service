@@ -65,7 +65,7 @@ module.exports.http = {
      },
 
     ocrServiceMidleware: function (req, res, next) {
-        if (((req.path.indexOf('/note/update/') == 0) || (req.path.indexOf('/note/create/') == 0)) && req.param('ocr')){
+        if ((req.path.indexOf('/note/update/') == 0)  && req.param('ocr')){
             return OCRService.processOCR(req,res,next);
          }else{
             return next();
