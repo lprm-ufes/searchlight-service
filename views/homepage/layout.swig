@@ -30,7 +30,6 @@
 
     <!--STYLES-->
     <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.css">
-    <link rel="stylesheet" href="/styles/importer.css">
     <!--STYLES END-->
   </head>
 
@@ -90,10 +89,9 @@
     -->
 
     <!--SCRIPTS-->
-    <script src="/js/dependencies/sails.io.js"></script>
-    <script src="/vendor/jquery/jquery.js"></script>
-    <script src="/vendor/bootstrap/bootstrap.js"></script>
-    <script src="/vendor/jquery.qrcode/jquery.qrcode.js"></script>
+    <script src="/bower_components/jquery/dist/jquery.js"></script>
+    <script src="/bower_components/jquery.qrcode/dist/jquery.qrcode.min.js"></script>
+    <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     <!--SCRIPTS END-->
   </body>
 </html>
