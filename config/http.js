@@ -37,7 +37,6 @@ module.exports.http = {
        'bodyParser',
        'handleBodyParserError',
        's3ServiceMidleware',
-       'ocrServiceMidleware',
        'compress',
        'methodOverride',
        'poweredBy',
@@ -61,14 +60,6 @@ module.exports.http = {
             return S3Service.fotoUpload(req,res,next,'foto','note')
         }else{
             return next()
-         }
-     },
-
-    ocrServiceMidleware: function (req, res, next) {
-        if ((req.path.indexOf('/note/update/') == 0)  && req.param('ocr')){
-            return OCRService.processOCR(req,res,next);
-         }else{
-            return next();
          }
      }
 

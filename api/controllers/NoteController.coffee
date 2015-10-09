@@ -77,6 +77,9 @@ module.exports = {
             .where(where).limit(limite)
             .exec (err,docxs)->
               res.jsonp(docxs)
-              
+
+  ocr: (req,res)->
+    OCRService.processOCR(req,res)
+             
 }
 # vim: set ts=2 sw=2 sts=2 expandtab:

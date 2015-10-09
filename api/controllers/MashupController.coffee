@@ -26,6 +26,21 @@ module.exports = {
       res.json(err)
     )
 
+  flat: (req,res)->
+    id = req.param('id')
+    if id
+        Mashup.findOne({id:id}).then((note)->
+          res.json(note)
+        ).catch((err)->
+          res.json(err)
+        )
+    else
+        Mashup.find( (err, users) ->
+            if (err)
+                return res.serverError(err)
+            return res.json(users)
+        )
+    
 
 
 }

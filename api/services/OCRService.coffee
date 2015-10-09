@@ -1,28 +1,41 @@
 exec = require('child_process').exec
 fs = require('fs')
+request = require('request')
 
 module.exports = {
-  # devolve o id da notebook responsavel por fazer o cache da fonte requisitada
-  processOCR: (req,res,next)->
-    #FIXME: nao permite OCR concorrente, eh preciso generalziar esse codigo
-    #
-    id = req.path.split('note/update/')[1].split('/')[0]
-    Note.findOne({id:id}).exec((err, found)->
-      try
-        ocrjson = JSON.stringify(req.param('ocr'))
-        console.log(ocrjson);
-        fs.writeFileSync('/tmp/ocr.json',ocrjson)
-        exec("bash /home/wancharle/searchlight-webapp/processaOCR.sh '#{found.fotoURL}' ",(error,stdout,stderr)->
+  processOCR: (req,res,next,privado)->
+      req.file('file').upload (err,uploaded)->
+        if err
+          res.badRequest(err)
+          return
+        filename = uploaded[0].fd
+        try
+          ocr  = req.param('ocr')
+          if ocr
+            ocrjson = JSON.stringify(req.param('ocr'))
+            nome = req.param('name')
+            fs.writeFileSync("/tmp/#{nome}.json",ocrjson)
+            exec("bash /home/wancharle/searchlight-webapp/processaOCR.sh '#{filename}' #{nome}",(error,stdout,stderr)->
+              console.log('[[[',stdout,']]]',stderr,error)
+              stdout = stdout.substr(stdout.indexOf('g\n')+1)
+              ocr_result = JSON.parse(stdout)
+              res.json(ocr_result)
+            )
+          else
+            if req.param('privado')
+              auth = "WANCHARLE:92355384-235D-4BA7-9662-D39D4D23B600"
+              url = "http://"+auth+"@www.ocrwebservice.com/restservices/processDocument?language=brazilian&gettext=true"
+              formData = { file: fs.createReadStream(filename+'') }
+              request.post {url:url, formData: formData},  (err, httpResponse, body) ->
+                if (err)
+                  res.serverError('upload failed:', err)
+                fs.unlinkSync(filename+'')
+                res.json(JSON.parse(body))
+            else
+              res.badRequest("request malfeito")
 
-          console.log(stdout,stderr,error)
-          stdout = stdout.substr(stdout.indexOf('\n')+1)
-          req.query.ocr_result = JSON.parse(stdout)
-          return next()
-
-         )
-      catch
-        return next()
-    )
+        catch ex
+          res.serverError(ex)
 
 }
  
