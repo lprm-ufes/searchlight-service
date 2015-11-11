@@ -50,6 +50,6 @@ module.exports.policies = {
 	// }
     NoteController:{
         'create': 'sessionAuth',
-        'delete': 'sessionAuth',
+        'destroy': 'sessionAuth',
         }
 };

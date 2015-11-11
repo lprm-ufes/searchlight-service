@@ -7,6 +7,9 @@ SLSAPI = require('slsapi')
 parseFloatPTBR = SLSAPI.utils.parseFloatPTBR
 
 module.exports = {
+  html: (req,res) ->
+      res.view('notes')
+
   anotar: (req,res) ->
     res.writeHead 200, {'content-type': 'text/html'}
     res.end '<form action="/note/create" enctype="multipart/form-data" method="post">

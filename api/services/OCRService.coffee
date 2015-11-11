@@ -8,14 +8,16 @@ module.exports = {
         if err
           res.badRequest(err)
           return
+        console.log(uploaded)
+
         filename = uploaded[0].fd
         try
           ocr  = req.param('ocr')
           if ocr
-            ocrjson = JSON.stringify(req.param('ocr'))
+            ocrjson = ocr #JSON.parse(ocr)
             nome = req.param('name')
             fs.writeFileSync("/tmp/#{nome}.json",ocrjson)
-            exec("bash /home/wancharle/searchlight-webapp/processaOCR.sh '#{filename}' #{nome}",(error,stdout,stderr)->
+            exec("bash /home/wancharle/searchlight-webapp/processaOCR.sh '#{filename+''}' #{nome}",(error,stdout,stderr)->
               console.log('[[[',stdout,']]]',stderr,error)
               stdout = stdout.substr(stdout.indexOf('g\n')+1)
               ocr_result = JSON.parse(stdout)
@@ -29,6 +31,7 @@ module.exports = {
               request.post {url:url, formData: formData},  (err, httpResponse, body) ->
                 if (err)
                   res.serverError('upload failed:', err)
+                console.log(body)
                 fs.unlinkSync(filename+'')
                 res.json(JSON.parse(body))
             else
