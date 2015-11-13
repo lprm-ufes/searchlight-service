@@ -3,10 +3,21 @@
  # @description :: Server-side logic for managing notes
  # @help        :: See http://links.sailsjs.org/docs/controllers
 
+exec = require('child_process').exec
 SLSAPI = require('slsapi')
 parseFloatPTBR = SLSAPI.utils.parseFloatPTBR
 
 module.exports = {
+  deleteImg: (req,res)->
+    bucket=req.param('bucket')
+    key=req.param('key')
+    exec("s3cmd rm s3://#{bucket}/#{key}", (error,stdout,stderr)->
+      if (error) 
+        res.send(error)
+      else
+        res.send(stdout)
+    ) 
+
   html: (req,res) ->
       res.view('notes')
 

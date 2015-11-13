@@ -17,11 +17,14 @@ module.exports = {
           # checa se url é interna ou externa
           console.log(found,"fonte", fonte,"!!!!!!!!!!!!!!!!")
           if (fonte.url.indexOf(req.host) == -1)
+              console.log('tentando importar')
               Notebook.findOne({name:fonte.url}).then( (notebook) ->
                 forcei = req.param('forceImport')
                 if (forcei)
+                  console.log('importe forcado')
                   NotesImporter.download(found,fonteIndex,notebook.id,next)
                 else
+                  console.log('importe normal')
                   next(null,notebook.id)
               ).catch( (err)->
                   NotesImporter.download(found,fonteIndex,false,next)

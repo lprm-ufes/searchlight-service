@@ -14,6 +14,7 @@ module.exports =
 
   login: (req, res) ->
     bcrypt = require 'bcrypt'
+    
 
     User.findOneByUsername(req.param('username')).exec (err,user) => 
       if err
@@ -24,6 +25,7 @@ module.exports =
         bcrypt.compare pass, user.password, (err, match) =>
           if err  
             res.json { error: 'Server error' }, 500
+            return
           if match
             # password match
             req.session.user = user.id

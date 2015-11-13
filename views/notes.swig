@@ -6,8 +6,7 @@ angular.module('NoteApp',[],function($locationProvider){
         $locationProvider.html5Mode({enabled:true,  requireBase: false });
 }).controller('NoteListController',['$scope','$http','$location', function($scope, $http,$location) {
     var noteList = this;
-    noteList.notes = [
-    ]
+    noteList.notes = [];
     noteList.printNote = function (note){
         var json =  JSON.parse(angular.toJson(note));
         delete json.geo ;
@@ -21,13 +20,38 @@ angular.module('NoteApp',[],function($locationProvider){
         delete json.hashid;
         delete json.latitude;
         delete json.longitude;
+        for (var k in json){
+           if (json.hasOwnProperty(k)){
+                json[k]=JSON.stringify(json[k]);     
+           }
+        }
         return json; 
     }
 
+    noteList.deleteImg = function(note,next){
+        img = note.fotoInfo
+        console.log(img);
+        if (img)
+            $http.get('/note/deleteImg/',{params:{ key: img[0].extra.Key, bucket: img[0].extra.Bucket}}).success(function (data){
+                next()
+            });     
+        else
+            next();
 
-    $http.get('/note/',{params:$location.search() }).success(function (data){
-        noteList.notes = data     
-    });
+    }
+
+    noteList.click = function(note){
+        noteList.deleteImg(note,function(){ 
+               $http.delete('/note/',{params:{id:note.id }}).success(function (data){ noteList.update() });
+        });
+    }
+
+    noteList.update = function(){
+        $http.get('/note/',{params:$location.search() }).success(function (data){
+            noteList.notes = data     
+        });
+    }
+    noteList.update();
 
 }]);
           
@@ -47,6 +71,7 @@ angular.module('NoteApp',[],function($locationProvider){
         <th>GeoLocation</th>
         <th>Media</th>
         <th>Conteúdo Dinâmico</th>
+        <th>Ações </th>
       </tr>
     </thead>
     <tbody> 
@@ -59,6 +84,7 @@ angular.module('NoteApp',[],function($locationProvider){
           </td>
           <td><a target="_blank" href="/note/{{note.id}}"><pre><span ng-repeat="(key, value) in  noteList.printNote(note)">{{key}}: {{value | limitTo : 50}}
 </span></pre></a></td>
+          <td><button type="button" ng-click='noteList.click(note)' class="btn btn-danger">Remover</button></td>
         </tr>
     </tbody>
     </table>
@@ -70,18 +96,4 @@ angular.module('NoteApp',[],function($locationProvider){
 {% endblock %}
 
 {% block scriptsloaded %}
-<script>
-$('a.link-remover').click(function (){
-      
-      $.ajax({
-         url: "/mashup/"+$(this).data('mashupid'),
-         type: "DELETE",
-         crossDomain: true,
-         success: function(){
-             window.location='/mashup/html';
-             }
-      } )
-    
-    });
-</script>
 {% endblock %}
