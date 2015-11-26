@@ -2,6 +2,7 @@
   "dependencies": {
     "bcrypt": "^0.8.5",
     "coffee-script": "^1.8.0",
+    "connect-mongo": "^0.8.2",
     "fv": "0.0.15",
     "grunt": "0.4.2",
     "grunt-contrib-clean": "~0.5.0",
