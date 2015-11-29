@@ -22,7 +22,7 @@ module.exports = {
                 return res.send('não foi possível acessar a variavel files')
               }
               req.query.fotoInfo=uploadedFiles
-              req.query.fotoURL=uploadedFiles[0].extra.Location
+              req.query.fotoURL="http://"+sails.config.sl.S3ENDPOINT+'/'+uploadedFiles[0].extra.Key
               return next()
               
             }

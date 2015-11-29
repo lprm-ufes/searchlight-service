@@ -8,6 +8,9 @@ SLSAPI = require('slsapi')
 parseFloatPTBR = SLSAPI.utils.parseFloatPTBR
 
 module.exports = {
+  thumbnail: (req,res)->
+    Thumbnail.process(req,res,req.param('id'))
+
   deleteImg: (req,res)->
     bucket=req.param('bucket')
     key=req.param('key')
