@@ -5,12 +5,15 @@ easyimg = require('easyimage')
 
 module.exports = {
   process: (req,res,url)->
-    match = url.match(/([^_]*)_(\d+)x(\d+)(.\w+)/)
+    match = url.match(/([^_]*)_(\d+)x(\d+)(.\w+)*/)
     if match == null
       res.notFound()
       return
 
-    key = match[1] + match[4]
+    if match[4]
+      key = match[1] + match[4]
+    else
+      key = match[1]
     urlCompleta = "http://#{sails.config.sl.S3ENDPOINT}/note/#{key}"
     urlDestino = "http://#{sails.config.sl.S3ENDPOINT}/note/#{url}"
     w = match[2]

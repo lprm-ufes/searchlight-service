@@ -1,7 +1,7 @@
 {% extends "layout.swig" %}
 {% block body %}
 <style>
-#{{note.container_id}} {height:85%; width:100%;}
+#{{note.container_id}} {height:90%; width:100%;}
 #map-{{note.container_id}} {width:100%; height:inherit;}
 .tab-content { height:inherit;}
 #lista-{{note.container_id}},#tab-{{note.container_id}} { height: 100%; overflow: auto}
