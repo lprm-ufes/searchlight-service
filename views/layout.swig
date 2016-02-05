@@ -36,9 +36,29 @@
   <body>
     {% block navbar %}  
     <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-        <a class="navbar-brand">Searchlight</a>
+      <div class="container">
+        <div class="navbar-header">
+        <a class="navbar-brand" href="/">Searchlight</a>
         </div>
+        <div id="navbar" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="/mashup/html">Mashups</a></li>
+          <li><a href="/note/html?sort=updatedAt DESC">Notas</a></li>
+            {% if req.session.authenticated %}
+            <li class="dropdown">
+              <a href="/user/html/{{req.session.user}}/" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ req.session.username }} <span class="caret"></a>
+              <ul class="dropdown-menu">
+                <li><a href="/note/html?user={{req.session.user}}&sort=updatedAt DESC">Minhas anotações</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a href="/user/logout?redirect=true">Sair</a></li>
+              </ul>
+            </li>
+            {% else %}
+          <li><a href="/user/login">login</a></li>
+            {% endif %}
+        </ul>
+</div>
+</div>
     </div>
     {% endblock %}
     {% block body %}
@@ -50,7 +70,7 @@
     <footer class="footer">
         <div class="pull-right">
             <a href="spaces.wancharle.com.br/sl">Searchlight</a>
-            <div>Facilitando a visualização de informações crowdsourcing em Mapas Web através de Zoom.</div>
+            <div>Uma plataforma para prototipagem de aplicações de crowdsourcing.</div>
         </div>
     </footer>
     </div>

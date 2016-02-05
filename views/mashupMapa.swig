@@ -1,18 +1,17 @@
 {% extends "layout.swig" %}
 {% block body %}
 <style>
-#{{note.container_id}} {height:90%; width:100%;}
+#{{note.container_id}} {height:{% if height %}{{ height }}{% else %}90%{% endif %}; width:100%;}
 #map-{{note.container_id}} {width:100%; height:inherit;}
 .tab-content { height:inherit;}
 #lista-{{note.container_id}},#tab-{{note.container_id}} { height: 100%; overflow: auto}
 html, body { height:100%;margin:0; margin-top:0px; padding:0;}
 </style>
-<div class="container" style="height:100%">
+<div class="container" style="margin:0px;width:100%;height:100%;padding:0px">
     <h2 style="text-align:center">{{ note.config.viewerTitle}}</h2>
     <div id="{{note.container_id}}"></div>
 </div>
 {% endblock %}
-
 
 {% block scriptsloaded %}
 <script> window.scriptFolder = 'http://wancharle.com.br/sl/' </script>

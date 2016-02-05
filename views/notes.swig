@@ -41,7 +41,10 @@ angular.module('NoteApp',[],function($locationProvider){
     }
 
     noteList.editar = function(note){
-        window.location = "/note/edit/?id="+note.id
+          query = $location.search()
+          query.id = note.id
+        $location.path('/note/edit/').search(query)
+       window.location = $location.absUrl();
     }
 
     noteList.remover = function(note){
@@ -81,7 +84,7 @@ angular.module('NoteApp',[],function($locationProvider){
     </thead>
     <tbody> 
         <tr ng-repeat='note in noteList.notes'>
-          <td><a target="_blank" href="/notebook/{{note.notebook.id}}">{{ note.notebook.name }}</a></td>
+          <td><a target="_blank" href="/notebook/{{note.notebook.id}}">{{ note.notebook.name | limitTo:20 }}</a></td>
           <td><a target="_blank" href="/user/{{note.user.id}}">{{ note.user.username }}</a></td>
           <td><a target="_blank" href="https://www.google.com.br/maps/place/{{ note.latitude}}+{{ note.longitude}}/@{{ note.latitude}},{{ note.longitude}},15z">{{ note.latitude | limitTo: 5}},{{ note.longitude | limitTo: 5}}</a></td>
           <td>
@@ -91,8 +94,8 @@ angular.module('NoteApp',[],function($locationProvider){
 </span></pre></a></td>
         {% endraw %}
         {% if req.session.authenticated %}{% raw %}
-          <td><button type="button" ng-click='noteList.editar(note)' class="btn btn-default">Editar</button></td>
-          <td><button type="button" ng-click='noteList.remover(note)' class="btn btn-danger">Remover</button></td>
+          <td><button ng-click='noteList.editar(note)' class="btn btn-default" title="editar"><span class="glyphicon glyphicon-edit"/> Editar</button></td>
+          <td><button ng-click='noteList.remover(note)' class="btn btn-danger" title="remover"><span class="glyphicon glyphicon-trash"/> Apagar</button></td>
         {% endraw %}
         {% endif %}
         </tr>

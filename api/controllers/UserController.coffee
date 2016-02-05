@@ -10,7 +10,10 @@ module.exports =
 
   logout: (req, res) ->
     req.session.authenticated = false
-    res.json {  ok:true}
+    if req.param('redirect')
+        res.redirect('/') 
+    else
+        res.json {  ok:true}
 
   login: (req, res) ->
     bcrypt = require 'bcrypt'

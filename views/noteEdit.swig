@@ -44,10 +44,11 @@ angular.module('NoteApp',[],function($locationProvider){
 
     note.click = function(continuar){
         $http.post('/note/update/'+note.data.data.id,note.editor.getValue()).success(function (data){
-            if (continuar)
-             window.location = "/note/edit?id="+note.data.data.id
-            else
-             window.location = "/note/html?notebook="+note.data.data.notebook
+            if (!continuar){
+                $location.search('id', null);
+                $location.path('/note/html');
+            }
+            window.location = $location.absUrl(); 
         })
     }
 

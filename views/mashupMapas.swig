@@ -28,7 +28,7 @@ angular.module('MashupApp',[],function($locationProvider){
 <div class="container" ng-app='MashupApp'>
 <div class="row" ng-controller='MashupListController as mashupList'>
 
-    <h1>Mashaps cadastrados</h1>
+    <h1>Mashups</h1>
     <ul class="list-group">
      {% raw %}
      <table class="table">

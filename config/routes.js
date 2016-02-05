@@ -31,14 +31,11 @@ module.exports.routes = {
   * `assets` directory)                                                      *
   *                                                                          *
   ***************************************************************************/
-
-  '/': {
-    view: 'index'
-  },
-  '/homepage/': {
-    view: 'homepage/index'
-  }
-
+   
+  '/': {  view: 'index'},
+  '/homepage/': {    view: 'homepage/index'},
+  'get /user/login': {    view: 'login'},
+  'post /user/login/': 'UserController.login'
 
   /***************************************************************************
   *                                                                          *
