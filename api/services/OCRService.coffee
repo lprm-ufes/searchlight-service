@@ -5,11 +5,13 @@ request = require('request')
 module.exports = {
   processOCR: (req,res,next,privado)->
       req.file('file').upload (err,uploaded)->
+        console.log("erro=",err,"\nuploaded=",uploaded)
         if err
           res.badRequest(err)
           return
-        console.log(uploaded)
-
+        if uploaded.length==0
+          res.badRequest("nao recebi o arquivo do upload")
+          return 
         filename = uploaded[0].fd
         try
           ocr  = req.param('ocr')
@@ -20,12 +22,16 @@ module.exports = {
             exec("bash /home/wancharle/searchlight-webapp/processaOCR.sh '#{filename+''}' #{nome}",(error,stdout,stderr)->
               console.log('[[[',stdout,']]]',stderr,error)
               stdout = stdout.substr(stdout.indexOf('g\n')+1)
-              ocr_result = JSON.parse(stdout)
+              try
+                ocr_result = JSON.parse(stdout)
+              catch ex
+                res.serverError(ex)
+                return 
               res.json(ocr_result)
             )
           else
             if req.param('privado')
-              auth = "WANCHARLE:92355384-235D-4BA7-9662-D39D4D23B600"
+              auth = "fernando:80463F29-76B9-497E-B009-A10F738F636D"
               url = "http://"+auth+"@www.ocrwebservice.com/restservices/processDocument?language=brazilian&gettext=true"
               formData = { file: fs.createReadStream(filename+'') }
               request.post {url:url, formData: formData},  (err, httpResponse, body) ->
