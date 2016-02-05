@@ -44,5 +44,8 @@
     "url": "git://github.com/wancharle/searchlight-webapp.git"
   },
   "author": "wancharle",
-  "license": ""
+  "license": "",
+  "devDependencies": {
+    "json-schema-generator": "^2.0.3"
+  }
 }

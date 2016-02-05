@@ -7,6 +7,7 @@ exec = require('child_process').exec
 SLSAPI = require('slsapi')
 parseFloatPTBR = SLSAPI.utils.parseFloatPTBR
 
+jsonSchemaGenerator = require('json-schema-generator')
 module.exports = {
   thumbnail: (req,res)->
     Thumbnail.process(req,res,req.param('id'))
@@ -22,7 +23,19 @@ module.exports = {
     ) 
 
   html: (req,res) ->
-      res.view('notes')
+    res.view('notes')
+
+  edit: (req,res)->
+    res.view('noteEdit')
+
+  schema: (req,res)->
+    id = req.param('id')
+    Note.findOne({id:id}).then((note)->
+      schema = jsonSchemaGenerator(note.toJSON())
+      res.json({schema:schema,data:note}) 
+    ).catch((err)->
+      res.json(err)
+    )
 
   anotar: (req,res) ->
     res.writeHead 200, {'content-type': 'text/html'}

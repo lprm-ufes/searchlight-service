@@ -29,6 +29,7 @@ module.exports =
           if match
             # password match
             req.session.user = user.id
+            req.session.username = user.username
             req.session.authenticated = true
             res.json user
           else

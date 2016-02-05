@@ -40,7 +40,12 @@ angular.module('NoteApp',[],function($locationProvider){
 
     }
 
-    noteList.click = function(note){
+    noteList.editar = function(note){
+        window.location = "/note/edit/?id="+note.id
+    }
+
+    noteList.remover = function(note){
+        if ( confirm("tem certeza que deseja remover essa anotação? "))
         noteList.deleteImg(note,function(){ 
                $http.delete('/note/',{params:{id:note.id }}).success(function (data){ noteList.update() });
         });
@@ -60,7 +65,7 @@ angular.module('NoteApp',[],function($locationProvider){
 <br>
 <div class="container" ng-app='NoteApp'>
 <div class="row" ng-controller='NoteListController as noteList'>
-    <h1>Notas cadastradas</h1>
+    <h1>Notas </h1>
     <ul class="list-group">
      {% raw %}
      <table class="table">
@@ -84,11 +89,15 @@ angular.module('NoteApp',[],function($locationProvider){
           </td>
           <td><a target="_blank" href="/note/{{note.id}}"><pre><span ng-repeat="(key, value) in  noteList.printNote(note)">{{key}}: {{value | limitTo : 50}}
 </span></pre></a></td>
-          <td><button type="button" ng-click='noteList.click(note)' class="btn btn-danger">Remover</button></td>
+        {% endraw %}
+        {% if req.session.authenticated %}{% raw %}
+          <td><button type="button" ng-click='noteList.editar(note)' class="btn btn-default">Editar</button></td>
+          <td><button type="button" ng-click='noteList.remover(note)' class="btn btn-danger">Remover</button></td>
+        {% endraw %}
+        {% endif %}
         </tr>
     </tbody>
     </table>
-        {% endraw %}
     </ul>
 
 </div>

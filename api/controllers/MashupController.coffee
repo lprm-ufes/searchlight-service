@@ -18,10 +18,11 @@ module.exports = {
 
   mapa: (req,res) ->
     id = req.param('id')
+    height = req.param('height')
     Mashup.findOne({id:id}).then((note)->
       if not note.container_id
           note.container_id = 'map'
-      res.view('mashupMapa',{note:note})
+      res.view('mashupMapa',{note:note,height:height})
     ).catch((err)->
       res.json(err)
     )
