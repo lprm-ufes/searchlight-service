@@ -42,6 +42,11 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
         <ul class="nav navbar-nav navbar-right">
+
+            {% if req.session.isAdmin %}
+             <li><a href="/user/html">Usuários</a></li>
+            {% endif %}
+          
           <li><a href="/mashup/html">Mashups</a></li>
           <li><a href="/note/html?sort=updatedAt DESC">Notas</a></li>
             {% if req.session.authenticated %}

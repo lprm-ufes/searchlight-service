@@ -7,6 +7,18 @@ angular.module('NoteApp',[],function($locationProvider){
 }).controller('NoteListController',['$scope','$http','$location', function($scope, $http,$location) {
     var noteList = this;
     noteList.notes = [];
+    $scope.init =  function(authenticated, user,isAdmin){
+        console.log(authenticated,user);
+        noteList.authenticated = authenticated;
+        noteList.user = user;
+        noteList.userIsAdmin = isAdmin;
+    }
+
+    noteList.podeAlterar = function(note){
+       value= note.user.id === noteList.user || noteList.userIsAdmin == 'true' 
+        console.log(value)
+        return value
+    }
     noteList.printNote = function (note){
         var json =  JSON.parse(angular.toJson(note));
         delete json.geo ;
@@ -27,7 +39,7 @@ angular.module('NoteApp',[],function($locationProvider){
         }
         return json; 
     }
-
+    
     noteList.deleteImg = function(note,next){
         img = note.fotoInfo
         console.log(img);
@@ -67,10 +79,9 @@ angular.module('NoteApp',[],function($locationProvider){
 <br>
 <br>
 <div class="container" ng-app='NoteApp'>
-<div class="row" ng-controller='NoteListController as noteList'>
+<div class="row" ng-controller='NoteListController as noteList' ng-init="init({{ req.session.authenticated }},'{{ req.session.user}}','{{req.session.isAdmin}}')">
     <h1>Notas </h1>
     <ul class="list-group">
-     {% raw %}
      <table class="table">
     <thead>
       <tr>
@@ -83,7 +94,8 @@ angular.module('NoteApp',[],function($locationProvider){
       </tr>
     </thead>
     <tbody> 
-        <tr ng-repeat='note in noteList.notes'>
+        <tr ng-repeat='note in noteList.notes'> 
+     {% raw %}
           <td><a target="_blank" href="/notebook/{{note.notebook.id}}">{{ note.notebook.name | limitTo:20 }}</a></td>
           <td><a target="_blank" href="/user/{{note.user.id}}">{{ note.user.username }}</a></td>
           <td><a target="_blank" href="https://www.google.com.br/maps/place/{{ note.latitude}}+{{ note.longitude}}/@{{ note.latitude}},{{ note.longitude}},15z">{{ note.latitude | limitTo: 5}},{{ note.longitude | limitTo: 5}}</a></td>
@@ -92,12 +104,9 @@ angular.module('NoteApp',[],function($locationProvider){
           </td>
           <td><a target="_blank" href="/note/{{note.id}}"><pre><span ng-repeat="(key, value) in  noteList.printNote(note)">{{key}}: {{value | limitTo : 50}}
 </span></pre></a></td>
+          <td><button ng-show="{{ noteList.podeAlterar(note) }}" ng-click='noteList.editar(note)' class="btn btn-default" title="editar"><span class="glyphicon glyphicon-edit"/> Editar</button></td>
+          <td><button ng-show="{{ noteList.podeAlterar(note) }}" ng-click='noteList.remover(note)' class="btn btn-danger" title="remover"><span class="glyphicon glyphicon-trash"/> Apagar</button></td>
         {% endraw %}
-        {% if req.session.authenticated %}{% raw %}
-          <td><button ng-click='noteList.editar(note)' class="btn btn-default" title="editar"><span class="glyphicon glyphicon-edit"/> Editar</button></td>
-          <td><button ng-click='noteList.remover(note)' class="btn btn-danger" title="remover"><span class="glyphicon glyphicon-trash"/> Apagar</button></td>
-        {% endraw %}
-        {% endif %}
         </tr>
     </tbody>
     </table>

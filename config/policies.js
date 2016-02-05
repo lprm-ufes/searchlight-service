@@ -48,8 +48,32 @@ module.exports.policies = {
 		// before letting any users feed our rabbits
 		// feed : ['isNiceToAnimals', 'hasRabbitFood']
 	// }
+    MashupController:{
+       '*':'isRoot',
+       find: true,
+       findOne: true,
+       html: true,
+       mapa: true,
+       flat: true,
+       qrcode:true,
+       getCachedUrl: true
+        },
+
     NoteController:{
-        'create': 'sessionAuth',
-        'destroy': 'sessionAuth',
-        }
+        '*': 'sessionAuth',
+        update: ['sessionAuth','isOwner'],
+        destroy: ['sessionAuth','isOwner'],
+        find:  true,
+        findOne:  true,
+        html:  true,
+        lista: true
+        },
+
+   UserController:{
+        '*': ['sessionAuth','isAdmin'],
+        logout: 'sessionAuth',
+        login: true,
+        find:  true,
+        findOne:  true
+       }
 };
