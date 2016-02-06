@@ -39,6 +39,11 @@ angular.module('UserApp',[],function($locationProvider){
        window.location = $location.absUrl();
     }
 
+    userList.viewNotes = function(user){
+       window.location = '/note/html?user='+user.id
+    }
+
+
     userList.remover = function(user){
         if ( confirm("tem certeza que deseja remover essa anotação? "))
         if ( confirm("tem certeza mesmo? "))
@@ -83,6 +88,7 @@ angular.module('UserApp',[],function($locationProvider){
             <span ng-hide="user.isAdmin" class="text-danger glyphicon glyphicon-minus-sign"></span> 
             <span ng-show="user.isAdmin" class="text-success glyphicon glyphicon-ok-sign"/></td>
         {% endraw %}{% if req.session.authenticated %}{% raw %}
+          <td><button ng-click="userList.viewNotes(user)" class="btn btn-primary" title="visualizar nota"><span class="glyphicon glyphicon-th-list"/> Exibir anotações</button></td>
           <td><button ng-click='userList.editar(user)' class="btn btn-default" title="editar"><span class="glyphicon glyphicon-edit"/> Editar</button></td>
           <td><button ng-click='userList.remover(user)' class="btn btn-danger" title="remover"><span class="glyphicon glyphicon-trash"/> Apagar</button></td>
         {% endraw %}
