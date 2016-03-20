@@ -21,7 +21,7 @@ angular.module('MashupApp',[],function($locationProvider){
     }
 
     mashupList.update = function(){
-        $http.get('/mashup/',{params:$location.search() }).success(function (data){
+        $http.get('/mashup/?sort=ordem DESC',{params:$location.search() }).success(function (data){
             mashupList.mashups = data     
         });
     }
