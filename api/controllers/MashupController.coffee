@@ -31,6 +31,9 @@ module.exports = {
       res.view('mashupMapas',{mashups:mashups})
   )
 
+  edit: (req,res)->
+    res.view('mashupEdit')
+
   mapa: (req,res) ->
     id = req.param('id')
     height = req.param('height')
