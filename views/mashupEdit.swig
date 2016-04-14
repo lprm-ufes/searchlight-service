@@ -2,8 +2,17 @@
 {% block body %}
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js"></script>
 <link rel="stylesheet" type="text/css" href="/bower_components/codemirror/lib/codemirror.css">
+<link rel="stylesheet" href="/bower_components/codemirror/addon/lint/lint.css">
+<style>
+.CodeMirror-lint-tooltip {
+    z-index:10000!important;
+}
+</style>
 <script type="text/javascript" src="/bower_components/codemirror/lib/codemirror.js"></script>
 <script type="text/javascript" src="/bower_components/codemirror/mode/javascript/javascript.js"></script>
+<script src="http://ajax.aspnetcdn.com/ajax/jshint/r07/jshint.js"></script>
+<script src="/bower_components/codemirror/addon/lint/lint.js"></script>
+<script src="/bower_components/codemirror/addon/lint/javascript-lint.js"></script>
 <script type="text/javascript" src="/bower_components/angular-ui-codemirror/ui-codemirror.js"></script>
 <script>
 angular.module('MashupApp',['ui.codemirror'],function($locationProvider){
@@ -19,6 +28,8 @@ angular.module('MashupApp',['ui.codemirror'],function($locationProvider){
     $scope.editorOptions = {
         lineNumbers: true,
         mode: 'javascript',
+            gutters: ["CodeMirror-lint-markers"],
+        lint:true,
     onLoad: function(_editor){
             $scope.codemirror = _editor;
             $scope.codemirror.refresh();
