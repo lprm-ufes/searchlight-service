@@ -7,7 +7,7 @@
 #lista-{{note.container_id}},#tab-{{note.container_id}} { height: 100%; overflow: auto}
 html, body { height:100%;margin:0; margin-top:0px; padding:0;}
 </style>
-<div class="container" style="margin:0px;width:100%;height:100%;padding:0px">
+<div class="container" style="margin:0px;width:100%;height:100%;padding:0px 10px;">
     <h2 style="text-align:center">{{ note.config.viewerTitle}}</h2>
     <div id="{{note.container_id}}"></div>
 </div>
