@@ -39,61 +39,83 @@ angular.module('MashupApp',['ui.codemirror'],function($locationProvider){
     editor.data = null;
 
     editor.click = function(continuar){
-        console.log(angular.toJson(mashup));
+        //console.log(angular.toJson(mashup));
     }
     
     // BDtab 
     editor.BDtab = {
+        save: function($event){
+            var popupValido = false
+            if (modal.url){
+              func_code = modal.func_code 
+              try{
+                func_name = "sl"+(new Date()).getTime()
+                eval(func_name+" = "+func_code)
+                func_code = eval(func_name)
+                    
+                popupValido = true
+                editor.BDtab.saveDs()
+              }catch(e){
+                alert("ERRO no código da função de conversão:\n\n"+e.toString());
+              }
+            }else{
+                alert("URL inválida!\n\nPor favor, informe uma url válida para a fonte de dados.");
+            }
+          
+            if (!popupValido){
+              $event.preventDefault()
+              $event.stopImmediatePropagation()
+              return false 
+            }else{ 
+              return true
+            }
+        },
         saveDs: function(){
             console.log(modal)
-            //mashup.dataSources[modal.dsindex].url = modal.url
-            //mashup.dataSources[modal.dsindex].func_code = modal.func_code
-
+            if (modal.dsindex == -1){
+                mashup.dataSources.push({url:modal.url,func_code:modal.func_code});    
+            }else{
+                mashup.dataSources[modal.dsindex].url = modal.url
+                mashup.dataSources[modal.dsindex].func_code = modal.func_code
+            }
+            console.log(angular.toJson(mashup.dataSources))
         }, 
-        bindPopup: function(){
-            $("div.modal-footer button.ok").off('click')
-            $("div.modal-footer button.ok").on('click',function(){ editor.BDtab.saveDs()})
-        },
-        openPopup: function (id_fonte){
+        openPopup: function(id_fonte){
                 editor.BDtab.loadFonte(id_fonte);
                 $('#bdtabpopup').modal('show');
-                editor.BDtab.bindPopup();
-                setTimeout(function(){
-                $scope.codemirror.refresh();
-                },600);
+                setTimeout(function(){ $scope.codemirror.refresh();},600); // fix bug nao aparece no modo bootstrap modal
         },
-        bind: function(){
-            $("#bdtab a.link-alterar").off('click');
-            $("#bdtab a.link-alterar").on('click', function(ev){
-               id_fonte = $(this).data('fonte')
-               editor.BDtab.openPopup(id_fonte);
-              console.log(id_fonte); 
-              console.log(mashup.dataSources[id_fonte].url);
-            });
+
+        alterar: function(id_fonte){
+           console.log(id_fonte);
+           editor.BDtab.openPopup(id_fonte);
+        },
+        remover: function(index){
+          mashup.dataSources.splice(index, 1);
         },
         loadFonte: function (i){
             modal.dsindex = i;
-            modal.url = mashup.dataSources[i].url
-            modal.func_code = mashup.dataSources[i].func_code
+            console.log(i)
+            if (i == -1){
+                modal.url = "" 
+                modal.func_code = ""
+            }else{
+                modal.url = mashup.dataSources[i].url
+                modal.func_code = mashup.dataSources[i].func_code
+            }
+            //$scope.$apply();
         },
         load: function(data){
             mashup.dataSources = data.dataSources
-            editor.BDtab.loadFonte(0); 
         }
     }
 
-    editor.bind = function (){
-        $('.nav-tabs a').on('shown.bs.tab', function(event){
-            editor.BDtab.bind();
-       });
-    }
     editor.load = function(){
         $http.get('/mashup/',{params:$location.search() }).success(function (data){
             console.log(data)
             editor.data = data
             mashup.title = data.title
             editor.BDtab.load(data)
-            editor.bind();
         });
     }
     editor.load();
@@ -142,7 +164,7 @@ angular.module('MashupApp',['ui.codemirror'],function($locationProvider){
                   </div> <!-- fim popup body-->
                   <div class="modal-footer">
                     <button type="button" class="btn btn-default cancelar" data-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-primary ok" data-dismiss="modal">OK</button>
+                    <button type="button" class="btn btn-primary ok" data-dismiss="modal" ng-click="mashupEditor.BDtab.save($event)">OK</button>
                   </div>
                 </div><!-- /.modal-content -->
               </div><!-- /.modal-dialog -->
@@ -151,10 +173,10 @@ angular.module('MashupApp',['ui.codemirror'],function($locationProvider){
         <legend>Fontes de dados</legend>
           <div class='form-group'>
             <ul class='list-group'>
-                {% raw%}<li ng-repeat="ds in mashup.dataSources" class='list-group-item'><span class='pull-right'><a class='link-alterar' data-fonte='{{$index}}' href='#'>Alterar</a> | <a class='link-remover' data-fonte='{{ $index}}' href='#'>Remover</a></span> <a href='{{ds.url}}' target='_blank'>{{ds.url}}</a></span></li> {% endraw %}
+                {% raw%}<li ng-repeat="ds in mashup.dataSources" class='list-group-item'><span class='pull-right'><a class='link-alterar' ng-click='mashupEditor.BDtab.alterar($index)' href='#'>Alterar</a> | <a class='link-remover' ng-click="mashupEditor.BDtab.remover($index)" href='#'>Remover</a></span> <a href='{{ds.url}}' target='_blank'>{{ds.url}}</a></span></li> {% endraw %}
              </ul>
 
-            <button type='button' class='btn btn-primary searchlight-btn-add-fonte'>Adicionar fonte</button>
+            <button type='button' class='btn btn-primary searchlight-btn-add-fonte' ng-click="mashupEditor.BDtab.alterar(-1)">Adicionar fonte</button>
           </div>
         </fieldset>
       </div> <!-- fim bdTAB -->
