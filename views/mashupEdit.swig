@@ -90,8 +90,9 @@ angular.module('MashupApp',['ui.codemirror'],function($locationProvider){
            console.log(id_fonte);
            editor.BDtab.openPopup(id_fonte);
         },
-        remover: function(index){
-          mashup.dataSources.splice(index, 1);
+        remover: function(index,url){
+          if (confirm("Tem certeza que deseja remover esta fonte de dados ("+url+") ?"))
+              mashup.dataSources.splice(index, 1);
         },
         loadFonte: function (i){
             modal.dsindex = i;
@@ -173,7 +174,7 @@ angular.module('MashupApp',['ui.codemirror'],function($locationProvider){
         <legend>Fontes de dados</legend>
           <div class='form-group'>
             <ul class='list-group'>
-                {% raw%}<li ng-repeat="ds in mashup.dataSources" class='list-group-item'><span class='pull-right'><a class='link-alterar' ng-click='mashupEditor.BDtab.alterar($index)' href='#'>Alterar</a> | <a class='link-remover' ng-click="mashupEditor.BDtab.remover($index)" href='#'>Remover</a></span> <a href='{{ds.url}}' target='_blank'>{{ds.url}}</a></span></li> {% endraw %}
+                {% raw%}<li ng-repeat="ds in mashup.dataSources" class='list-group-item'><span class='pull-right'><a class='link-alterar' ng-click='mashupEditor.BDtab.alterar($index)' href='#'>Alterar</a> | <a class='link-remover' ng-click="mashupEditor.BDtab.remover($index,ds.url)" href='#'>Remover</a></span> <a href='{{ds.url}}' target='_blank'>{{ds.url}}</a></span></li> {% endraw %}
              </ul>
 
             <button type='button' class='btn btn-primary searchlight-btn-add-fonte' ng-click="mashupEditor.BDtab.alterar(-1)">Adicionar fonte</button>
