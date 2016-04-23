@@ -45,7 +45,10 @@ angular.module('MashupApp',['ui.codemirror'],function($locationProvider){
     // ColetorTab
     var ColetorTab = {
         updateSimulador: function(){
-            $('#colframe').html('<iframe style="width:320px;height:568px;margin-top:216px;margin-left:130px;" src="/slc"></iframe>')
+            $('#colframe').html('<iframe scrolling="no" style="width:320px;height:568px;border:0px;margin-top:216px;margin-left:135px;" src="/slc/?mashup=http://sl.wancharle.com.br/mashup/'+mashup.id+'"></iframe>')
+        },
+        load: function(data){
+            mashup.acoes = data.acoes
         }
     }
     $scope.ColetorTab = ColetorTab;
@@ -124,7 +127,9 @@ angular.module('MashupApp',['ui.codemirror'],function($locationProvider){
             console.log(data)
             editor.data = data
             mashup.title = data.title
+            mashup.id = data.id
             editor.BDtab.load(data)
+            ColetorTab.load(data)
         });
     }
     editor.load();
@@ -140,7 +145,7 @@ angular.module('MashupApp',['ui.codemirror'],function($locationProvider){
     <ul class="nav nav-tabs">
         <li class="active"><a data-toggle="tab" href="#mashuptab">Mashup</a></li>
         <li><a data-toggle="tab" href="#bdtab">Dados</a></li>
-        <li><a data-toggle="tab" href="#coletortab">Coletor</a></li>
+        <li><a data-toggle="tab" ng-click="ColetorTab.updateSimulador()" href="#coletortab">Coletor</a></li>
         <li><a data-toggle="tab" href="#servicotab">Serviço</a></li>
         <li><a data-toggle="tab" href="#viewtab">Visualização</a></li>
     </ul>
