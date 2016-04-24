@@ -1,5 +1,7 @@
 {% extends "layout.swig" %}
 {% block body %}
+
+<script src="http://rawgit.com/wancharle/json-editor/master/dist/jsoneditor.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js"></script>
 <link rel="stylesheet" type="text/css" href="/bower_components/codemirror/lib/codemirror.css">
 <link rel="stylesheet" href="/bower_components/codemirror/addon/lint/lint.css">
@@ -44,8 +46,60 @@ angular.module('MashupApp',['ui.codemirror'],function($locationProvider){
     }
     // ColetorTab
     var ColetorTab = {
+        iAction : 0,
         updateSimulador: function(){
             $('#colframe').html('<iframe scrolling="no" style="width:320px;height:568px;border:0px;margin-top:216px;margin-left:135px;" src="/slc/?mashup=http://sl.wancharle.com.br/mashup/'+mashup.id+'"></iframe>')
+        },
+        createActionEditor: function(){
+            schema = {}
+            schema.title = 'Açao'
+            schema.properties = {}
+            schema.properties.tipo = { "type":"string","enum":["simple", "normal", "tracking"]}
+            schema.properties.legenda= { "type":"string","minLength":3}
+            schema.properties.valor= { "type":"string","minLength":3}
+            schema.properties.extra= { "type":"string"}
+            schema.required =  [ "tipo", "legenda", "valor", "extra" ]
+
+            //schema.properties.action = { "type":"object",format:"tab","oneOf":[ {"$ref":"#/definitions/pess"},{"$ref":"#/definitions/pessoa2"}]}
+            //schema.definitions = {"pess":{"title":"pess","required":["name"],"properties":{"name":{"type":"string"}}},"pessoa2":{"required":["nome2"],"properties":{"nome2":{"type":"string"}},"title":"pess2"}}
+            if (ColetorTab.iAction == -1)
+                startval = {}
+            else
+                startval = JSON.parse(angular.toJson(mashup.acoes[ColetorTab.iAction]))
+
+            console.log(startval)
+            if (ColetorTab.editor)
+                ColetorTab.editor.setValue(startval)
+            else
+                ColetorTab.editor = new JSONEditor(document.getElementById('actionEditor'),{ schema: schema,
+                startval:startval,
+                form_name_root:'note',
+                disable_properties: true,
+                no_additional_properties: true,
+                         
+                disable_collapse: true,
+                theme : 'bootstrap3'
+            });
+        },
+        alterar: function(iAction){
+           ColetorTab.iAction = iAction
+           $('#coletortabpopup').modal('show');
+           ColetorTab.createActionEditor();
+        },
+        remover: function(iAction){
+          if (confirm("Tem certeza que deseja remover esta ação ("+mashup.acoes[iAction].legenda+") ?"))
+              mashup.acoes.splice(iAction, 1);
+        },
+        save: function ($event){
+            errors = ColetorTab.editor.validate()
+            if (errors.length){
+                alert(erros)
+                return;
+             }
+            action = ColetorTab.editor.getValue()
+            if (ColetorTab.iAction==-1)  mashup.acoes.push(action)
+            else mashup.acoes[ColetorTab.iAction]=action;
+            $('#coletortabpopup').modal('hide');
         },
         load: function(data){
             mashup.acoes = data.acoes
