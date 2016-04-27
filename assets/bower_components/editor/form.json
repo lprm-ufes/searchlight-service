@@ -1,0 +1,11 @@
+{
+  "title": "Formulario",
+  "type": "object",
+  "id": "formulario",
+  "properties" : {
+    "legenda" : { "title":"Legenda do botão", "type":"string","minLength":"3"},
+    "extra" : { "title":"Ícone do botão","type":"string"},
+    "valor" : { "title": "Categoria da anotação","type":"string","minLength":"3"},
+    "tipo" : { "title":"Tipo de ação","type":"string","enum":["simple", "normal", "tracking","identification"]}
+  }
+}

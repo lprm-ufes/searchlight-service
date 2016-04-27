@@ -1,0 +1,21 @@
+{
+    "title" : "Múltipla Escolha",
+    "id": "multipla",
+    "properties" : {
+        "title": { "type":"string","title":"Rótulo"},
+        "opcoes": { 
+            "type":"array",
+            "title": "Opções",
+            "format": "table",
+            "id": "opcoes",
+            "items": {
+                "headerTemplate": "{{i}}",
+                "type":"object",
+                "id":"opcao",
+                "properties": { "opção": { "type":"string" }}
+            }
+    }
+ }
+}
+
+

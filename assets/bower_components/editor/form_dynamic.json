@@ -1,0 +1,24 @@
+{
+  "$ref": "/bower_components/editor/form.json",
+  "properties": {
+    "foto" : {"title": "pode tirar foto.", "type":"boolean","format":"checkbox","value": "true" },
+    "youtube" : {"title": "pode inserir vídeo do youtube", "type":"boolean","format":"checkbox","value": "true"},
+    "qrcode": { "title": "poder identificar a anotação com códigos de barras e qrcode.","type":"boolean","format":"checkbox","value": "true" },
+    "form-schema" : { 
+        "type":"array", 
+        "title": "Perguntas", 
+        "id": "pergunta",
+        "format":"tabs",
+        "items":{ 
+           "headerTemplate": "{{i}}",
+           "title": "Pergunta",
+           "oneOf": [ 
+                    { "$ref": "/bower_components/editor/textosimples.json", "title":"Texto Simples" },
+                    { "$ref": "/bower_components/editor/multipla.json", "title":"Múltipla Escolha" }
+                    ]
+       
+        }
+    }
+ 
+    }
+}

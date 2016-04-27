@@ -1,0 +1,12 @@
+{
+    "title" : "Texto simples",
+    "type": "object",
+    "id": "texto-simples",
+    "properties" : {
+     "title": { "type":"string","title":"Rótulo"},
+     "default": { "type":"string","title":"Resposta inicial"},
+    "minLength": { "title":"número mínimo de caracteres","type":"integer","minimum":0,"default":0 },
+    "maxLength": { "title":"número máximo de caracteres","type":"integer","minimum":0,"maximum":500,"default":50 }
+}
+}
+
