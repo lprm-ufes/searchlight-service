@@ -51,17 +51,77 @@ angular.module('MashupApp',['ui.codemirror'],function($locationProvider){
             $('#colframe').html('<iframe scrolling="no" style="width:320px;height:568px;border:0px;margin-top:216px;margin-left:135px;" src="/slc/?mashup=http://sl.wancharle.com.br/mashup/'+mashup.id+'"></iframe>')
         },
         createActionEditor: function(){
-            schema = {}
-            schema.title = 'Açao'
-            schema.properties = {}
-            schema.properties.tipo = { "type":"string","enum":["simple", "normal", "tracking"]}
-            schema.properties.legenda= { "type":"string","minLength":3}
-            schema.properties.valor= { "type":"string","minLength":3}
-            schema.properties.extra= { "type":"string"}
-            schema.required =  [ "tipo", "legenda", "valor", "extra" ]
+            legenda = { "title":"Legenda do botão", "type":"string","minLength":3}
+            extra = { "title":"Ícone do botão","type":"string"}
+            valor = { "title": "Categoria da anotação","type":"string","minLength":3}
 
-            //schema.properties.action = { "type":"object",format:"tab","oneOf":[ {"$ref":"#/definitions/pess"},{"$ref":"#/definitions/pessoa2"}]}
-            //schema.definitions = {"pess":{"title":"pess","required":["name"],"properties":{"name":{"type":"string"}}},"pessoa2":{"required":["nome2"],"properties":{"nome2":{"type":"string"}},"title":"pess2"}}
+            textosimples = {
+                title : "Texto simples",
+                properties : {
+                    default: { type:"string",title:"Resposta inicial"},
+                    minLength: { title:"número mínimo de caracteres",type:"integer","minimum":0,"default":0 },
+                    maxLength: { title:"número máximo de caracteres",type:"integer","minimum":0,"maximum":500,"default":50 }
+             }
+            }
+ 
+            multipla = {
+                title : "Múltipla Escolha",
+                properties : {
+                    opcoes: { 
+                        type:"array",
+                        title: "Opções",
+                        items: {
+                            type:"object",
+                            properties: { "opção": { type:"string" }}
+                        }
+                    },
+             }
+            }
+            basic = {
+                title:"Padrão",
+                properties : {
+                    legenda : legenda,
+                    extra : extra,
+                    valor : valor,
+                    tipo : { "title":"Tipo de ação","type":"string","enum":["simple", "normal", "tracking","identification"]}
+               },
+               required :["legenda", "extra", "valor","tipo"]
+            }
+ 
+            custom = {}
+            custom.title = "Customizado"
+            custom.properties = {
+                legenda: legenda
+                ,extra: extra
+                ,foto : {"title": "pode tirar foto.", "type":"boolean","format":"checkbox","value": true }
+                ,youtube : {"title": "pode inserir vídeo do youtube", "type":"boolean","format":"checkbox","value": true }
+                ,qrcode: { "title": "poder identificar a anotação com códigos de barras e qrcode.","type":"boolean","format":"checkbox","value": true }
+                ,perguntas : { type:"array", "title": "Perguntas", 
+                    format:"tabs",
+                    items:{ 
+                       title: "Pergunta",
+                       oneOf: [ 
+                                { "$ref": "#/definitions/textosimples", title:"Texto Simples" },
+                                { "$ref": "#/definitions/multiplaescolha", title:"Múltipla Escolha" }
+                                ]
+                   
+                    }
+                }
+            }
+            custom.required =  ["legenda", "extra" ]
+ 
+
+            schema = {}
+            schema.title = 'Tipo de formulário'
+            schema.type="object"
+            schema.oneOf=[ {"$ref":"#/definitions/padrão"},{"$ref":"#/definitions/customizado"}]
+            schema.definitions = {}
+            schema.definitions['padrão'] = basic
+            schema.definitions['customizado'] = custom
+            schema.definitions['textosimples'] = textosimples 
+            schema.definitions['multiplaescolha'] = multipla
+
+
             if (ColetorTab.iAction == -1)
                 startval = {}
             else
@@ -69,13 +129,14 @@ angular.module('MashupApp',['ui.codemirror'],function($locationProvider){
 
             console.log(startval)
             if (ColetorTab.editor)
-                ColetorTab.editor.setValue(startval)
-            else
-                ColetorTab.editor = new JSONEditor(document.getElementById('actionEditor'),{ schema: schema,
+                ColetorTab.editor.destroy()
+            ColetorTab.editor = new JSONEditor(document.getElementById('actionEditor'),{ schema: schema,
                 startval:startval,
                 form_name_root:'note',
                 disable_properties: true,
+                disable_edit_json: true,
                 no_additional_properties: true,
+                        required_by_default: true,
                          
                 disable_collapse: true,
                 theme : 'bootstrap3'
@@ -93,10 +154,12 @@ angular.module('MashupApp',['ui.codemirror'],function($locationProvider){
         save: function ($event){
             errors = ColetorTab.editor.validate()
             if (errors.length){
-                alert(erros)
+                console.log(errors);
                 return;
              }
             action = ColetorTab.editor.getValue()
+            console.log(action)
+            return
             if (ColetorTab.iAction==-1)  mashup.acoes.push(action)
             else mashup.acoes[ColetorTab.iAction]=action;
             $('#coletortabpopup').modal('hide');
