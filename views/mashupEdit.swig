@@ -35,7 +35,7 @@
         <li><a data-toggle="tab" href="#bdtab">Dados</a></li>
         <li><a data-toggle="tab" ng-click="ColetorTab.updateSimulador()" href="#coletortab">Coletor</a></li>
         <li><a data-toggle="tab" href="#servicotab">Serviço</a></li>
-        <li><a data-toggle="tab" href="#viewtab">Visualização</a></li>
+        <li><a data-toggle="tab" ng-click="ViewTab.updateMirror()" href="#viewtab">Visualização</a></li>
     </ul>
 
     <div class="tab-content">
@@ -66,7 +66,10 @@
         <p>serviço</p>
       </div>
       <div id="viewtab" style="padding:15px;" class="tab-pane fade">
-        <p>visualização</p>
+        <p><a target="_blank" ng-click="ViewTab.click()">Visualização</a></p>
+        <label for='view-extra' class='control-label'>Código da visualização Extra</label>
+                <textarea ui-codemirror ui-codemirror-opts="editorOptions" ui-refresh='modal.refreshV' rows='6' type='text' class='form-control' id='view-extra' placeholder='código para visualização extra do searchlight' ng-model="mashup.viewExtra"></textarea>
+ 
       </div>
     </div>
 </div> <!-- fim editor -->

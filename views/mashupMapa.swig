@@ -1,6 +1,7 @@
 {% extends "layout.swig" %}
 {% block body %}
 <style>
+
 #{{note.container_id}} {height:{% if height %}{{ height }}{% else %}90%{% endif %}; width:100%;}
 #map-{{note.container_id}} {width:100%; height:inherit;}
 .tab-content { height:inherit;}
@@ -21,6 +22,8 @@ var conf = {{ note|safe|json }};
 L.Icon.Default.imagePath = "http://wancharle.com.br/sl/images/leaflet"                                                                                                          
 var slv = new Searchlight(conf);
 </script>
+<link href="https://wancharle.github.io/emoji-css/emoji.css" rel="stylesheet">
+<script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 {% endblock %}
 {% block footer %}{% endblock %}
 {% block navbar %}{% endblock %}

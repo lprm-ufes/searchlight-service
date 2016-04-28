@@ -19,6 +19,9 @@ angular.module('MashupApp',[],function($locationProvider){
             if (confirm('TEM CERTEZA MESMO?'))
                $http.delete('/mashup/',{params:{id:mashup.id }}).success(function (data){ mashupList.update() });
     }
+    mashupList.editar = function(mashup){
+        window.location='/mashup/edit/?id='+ mashup.id 
+    }
 
     mashupList.update = function(){
         $http.get('/mashup/?sort=ordem DESC',{params:$location.search() }).success(function (data){
@@ -52,6 +55,8 @@ angular.module('MashupApp',[],function($locationProvider){
             <td><a target="_self" href="/mashup/mapa/{{ mashup.id }}" title='Visualizar mashup {{mashup.title}}' class=""><span class="glyphicon glyphicon-eye-open"></span> Visualizar</a></td>
             <td><a target="_self" href="/mashup/qrcode/{{ mashup.id }}" title='Vincular mashup {{mashup.title}}'><span class="glyphicon glyphicon-qrcode"></span> Vincular</a></td>
             <td><a ng-show='mashupList.podeAlterar(mashup)' ng-click='mashupList.delete(mashup)' class="text-danger"><span class="glyphicon glyphicon-trash"></span> Remover</a> </td>
+            <td><a ng-show='mashupList.podeAlterar(mashup)' ng-click='mashupList.editar(mashup)' class="text-danger"><span class="glyphicon glyphicon-edit"></span> Editar</a> </td>
+ 
         </tr>
     </tbody>
     </table>
