@@ -4,6 +4,7 @@
     "coffee-script": "^1.8.0",
     "connect-mongo": "^0.8.2",
     "easyimage": "^2.1.0",
+    "fv": "0.0.16",
     "grunt-contrib-clean": "^1.0.0",
     "grunt-contrib-coffee": "^1.0.0",
     "grunt-contrib-concat": "^1.0.1",
@@ -30,6 +31,7 @@
   "description": "a Sails application",
   "keywords": [],
   "scripts": {
+    "preinstall": "sudo apt-get install libtesseract-dev libleptonica-dev libopencv-dev",
     "start": "node app.js",
     "debug": "node debug app.js"
   },
